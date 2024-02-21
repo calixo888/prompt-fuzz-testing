@@ -166,16 +166,17 @@ def fetch_completion(index):
 
 # Generate outputs
 if st.button("Generate"):
-    # st.write("Messages submitted:", messages)
-    outputs = []
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        future_to_completion = {
-            executor.submit(fetch_completion, i): i for i in range(5)
-        }
-        for future in concurrent.futures.as_completed(future_to_completion):
-            outputs.append(future.result())
+    with st.spinner("Generating completions... Please wait"):
+        outputs = []
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            future_to_completion = {
+                executor.submit(fetch_completion, i): i
+                for i in range(n)  # Adjusted to use 'n' for dynamic generation count
+            }
+            for future in concurrent.futures.as_completed(future_to_completion):
+                outputs.append(future.result())
 
-    # Display metrics
+    # Display metrics outside the spinner context to show them after loading is done
     st.write("Average Cosine Similarity:", average_cosine_similarity(outputs))
     st.write("Average BLEU Scores:", average_bleu_scores(outputs))
     st.write("Average Jaccard Similarity:", average_jaccard_similarity(outputs))
