@@ -9,10 +9,14 @@ from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor
 import concurrent.futures
 import numpy as np
+import nltk
 import os
 
 # Load environment variables
 load_dotenv(".env")
+
+# Install NLTK library
+nltk.download("punkt")
 
 # Initialize OpenAI client
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -141,21 +145,21 @@ if "message_counter" not in st.session_state:
     st.session_state["message_counter"] = 0
 
 # Existing code for adding a new message
-add_message = st.button("Add another message")
-if add_message:
-    # Increment the counter to ensure a unique key for the new message
-    st.session_state["message_counter"] += 1
-    unique_key = st.session_state["message_counter"]
-    new_role = st.selectbox(
-        "Select role for new message",
-        ("system", "user", "assistant"),
-        key=f"new_role_{unique_key}",
-    )
-    new_content = st.text_input(
-        "Enter the content for the new message", key=f"new_content_{unique_key}"
-    )
-    # Append new message to session state
-    st.session_state["messages"].append({"role": new_role, "content": new_content})
+# add_message = st.button("Add another message")
+# if add_message:
+#     # Increment the counter to ensure a unique key for the new message
+#     st.session_state["message_counter"] += 1
+#     unique_key = st.session_state["message_counter"]
+#     new_role = st.selectbox(
+#         "Select role for new message",
+#         ("system", "user", "assistant"),
+#         key=f"new_role_{unique_key}",
+#     )
+#     new_content = st.text_input(
+#         "Enter the content for the new message", key=f"new_content_{unique_key}"
+#     )
+#     # Append new message to session state
+#     st.session_state["messages"].append({"role": new_role, "content": new_content})
 
 # Use session state for messages throughout your app
 messages = st.session_state["messages"]
