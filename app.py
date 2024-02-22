@@ -136,11 +136,16 @@ initial_message = st.text_input(
 # Update the initial message in session state
 st.session_state["messages"][0]["content"] = initial_message
 
+# Initialize a counter in session state for generating unique keys if not present
+if "message_counter" not in st.session_state:
+    st.session_state["message_counter"] = 0
+
 # Existing code for adding a new message
 add_message = st.button("Add another message")
 if add_message:
-    # Generate a unique key for the new message based on the number of existing messages
-    unique_key = len(st.session_state["messages"])
+    # Increment the counter to ensure a unique key for the new message
+    st.session_state["message_counter"] += 1
+    unique_key = st.session_state["message_counter"]
     new_role = st.selectbox(
         "Select role for new message",
         ("system", "user", "assistant"),
